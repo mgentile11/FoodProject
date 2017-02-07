@@ -1,25 +1,151 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  </head>
-  <body>
-    <nav class="navbar navbar-inverse navbar-light bg-faded navbar-fixed-top">
+  <!--FullCalendar Dependencies-->
+  <link href='fullcalendar/fullcalendar.css' rel='stylesheet' />
+  <link href='fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
+  
+  <!--jQuery-->
+  <script src='jquery/jquery-1.9.1.min.js'></script>
+  <script src='jquery/jquery-ui-1.10.2.custom.min.js'></script>
+  
+  <!--FullCalendar-->
+  <script src='fullcalendar/fullcalendar.min.js'></script>
+  <script type="text/javascript">
+    
+    /*
+      jQuery document ready
+    */
+    
+    $(document).ready(function()
+    {
+      /*
+        date store today date.
+        d store today date.
+        m store current month.
+        y store current year.
+      */
+      var date = new Date();
+      var d = date.getDate();
+      var m = date.getMonth();
+      var y = date.getFullYear();
+      
+      /*
+        Initialize fullCalendar and store into variable.
+        Why in variable?
+        Because doing so we can use it inside other function.
+        In order to modify its option later.
+      */
+      
+      var calendar = $('#calendar').fullCalendar(
+      {
+        /*
+          header option will define our calendar header.
+          left define what will be at left position in calendar
+          center define what will be at center position in calendar
+          right define what will be at right position in calendar
+        */
+        header:
+        {
+          left: 'prev,next',
+          center: 'title',
+          right: 'month,agendaWeek'
+        },
+        /*
+          defaultView option used to define which view to show by default,
+          for example we have used agendaWeek.
+        */
+        defaultView: 'month',
+        /*
+          selectable:true will enable user to select datetime slot
+          selectHelper will add helpers for selectable.
+        */
+        selectable: true,
+        selectHelper: true,
+        /*
+          when user select timeslot this option code will execute.
+          It has three arguments. Start,end and allDay.
+          Start means starting time of event.
+          End means ending time of event.
+          allDay means if events is for entire day or not.
+        */
+        select: function(start, end, allDay)
+        {
+          /*
+            after selection user will be promted for enter title for event.
+          */
+          var title = prompt('Event Title:');
+          /*
+            if title is enterd calendar will add title and event into fullCalendar.
+          */
+          if (title)
+          {
+            calendar.fullCalendar('renderEvent',
+              {
+                title: title,
+                start: start,
+                end: end,
+                allDay: allDay
+              },
+              true // make the event "stick"
+            );
+          }
+          calendar.fullCalendar('unselect');
+        },
+        /*
+          editable: true allow user to edit events.
+        */
+        editable: false,
+        /*
+          events is the main option for calendar.
+          for demo we have added predefined events in json object.
+        */
+        events: [
+          {
+            title: '',
+            start: new Date(y, m, 1),
+            end: new Date(y, m, 1)
+          }
+        ],
+        eventColor: '#FF1487'
+      });
+      
+    });
+  </script>
+  <style type="text/css">
+    body
+    {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 14px;
+      font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+    }
+    #calendar
+    {
+      width: 900px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" href="#">WebSiteName</a>
         </div>
         <ul class="nav navbar-nav">
           <li><a href="../index.html">Home</a></li>
-          <li class="active"><a href="calendar.html">Calendar</a></li>
-          <li><a href="pantry.html">Pantry</a></li>
-          <li><a href="recipes.html">Recipes</a></li>
+          <li><a href="calendar.html">Calendar</a></li>
+          <li><a href="../html/pantry.html">Pantry</a></li>
+          <li><a href="../html/recipes.html">Recipes</a></li>
         </ul>
-  </div>
-</nav>
-  </body>
+      </div>
+    </nav>
+  <!--FullCalendar container div-->
+  <br>
+  <div id='calendar'></div>
+  
+</body>
 </html>
